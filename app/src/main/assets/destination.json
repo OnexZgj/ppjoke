@@ -1,0 +1,42 @@
+{
+  "main/tabs/sofa": {
+    "isFragment": true,
+    "asStarter": false,
+    "needLogin": false,
+    "pageUrl": "main/tabs/sofa",
+    "className": "com.onexzgj.ppjoke.ui.sofa.SofaFragment",
+    "id": 1722616803
+  },
+  "main/tabs/home": {
+    "isFragment": true,
+    "asStarter": true,
+    "needLogin": false,
+    "pageUrl": "main/tabs/home",
+    "className": "com.onexzgj.ppjoke.ui.home.HomeFragment",
+    "id": 1773582109
+  },
+  "main/tabs/publish": {
+    "isFragment": false,
+    "asStarter": false,
+    "needLogin": true,
+    "pageUrl": "main/tabs/publish",
+    "className": "com.onexzgj.ppjoke.publish.PublishActivity",
+    "id": 920095424
+  },
+  "main/tabs/find": {
+    "isFragment": true,
+    "asStarter": false,
+    "needLogin": false,
+    "pageUrl": "main/tabs/find",
+    "className": "com.onexzgj.ppjoke.ui.find.FindFragment",
+    "id": 154304221
+  },
+  "main/tabs/my": {
+    "isFragment": true,
+    "asStarter": false,
+    "needLogin": false,
+    "pageUrl": "main/tabs/my",
+    "className": "com.onexzgj.ppjoke.ui.me.MyFragment",
+    "id": 92061545
+  }
+}
