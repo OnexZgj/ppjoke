@@ -1,14 +1,21 @@
 package com.onexzgj.ppjoke.ui.home;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+import com.mooc.libcommon.view.CornerFrameLayout;
 import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.base.BaseAdapter;
 import com.onexzgj.ppjoke.model.Feed;
@@ -64,10 +71,84 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
             this.mItemView = itemView;
         }
 
-        public void bindData(Feed item) {
-            PPImageView feedImage = mItemView.findViewById(R.id.feed_image);
-            feedImage.setImageUrl(item.cover);
-        }
+        public void bindData(Feed feed) {
+            TextView tvFeedText = mItemView.findViewById(R.id.tv_feed_text);
+            tvFeedText.setText(feed.feeds_text);
 
+            MaterialButton materialButtonFeedTag = mItemView.findViewById(R.id.feed_tag);
+            materialButtonFeedTag.setText(feed.activityText);
+
+            PPImageView feedContentImage = mItemView.findViewById(R.id.feed_content_image);
+            feedContentImage.setImageUrl(feed.cover);
+
+            TextView tvAuthorName = mItemView.findViewById(R.id.tv_author_username);
+            PPImageView ivAuthorAvatar = mItemView.findViewById(R.id.iv_author_avatar);
+
+            PPImageView.setImageUrl(ivAuthorAvatar, feed.author.avatar, true);
+            tvAuthorName.setText(feed.author.name);
+
+            MaterialButton like = mItemView.findViewById(R.id.like);
+            like.setText(feed.ugc.likeCount > 0 ? "" + feed.ugc.likeCount : mContext.getResources().getString(R.string.like));
+            like.setTextColor(feed.ugc.hasLiked ? mContext.getResources().getColor(R.color.color_theme) :
+                    mContext.getResources().getColor(R.color.color_3d3));
+            like.setIconTint(ColorStateList.valueOf(feed.ugc.hasLiked ? mContext.getResources().getColor(R.color.color_theme) :
+                    mContext.getResources().getColor(R.color.color_3d3)));
+            like.setIcon(feed.ugc.hasLiked ? mContext.getDrawable(R.drawable.icon_cell_liked) :
+                    mContext.getDrawable(R.drawable.icon_cell_like));
+
+
+            MaterialButton diss = mItemView.findViewById(R.id.diss);
+            diss.setTextColor(feed.ugc.hasdiss ? mContext.getResources().getColor(R.color.color_theme) :
+                    mContext.getResources().getColor(R.color.color_3d3));
+            diss.setIconTint(ColorStateList.valueOf(feed.ugc.hasdiss ? mContext.getResources().getColor(R.color.color_theme) :
+                    mContext.getResources().getColor(R.color.color_3d3)));
+            diss.setIcon(feed.ugc.hasdiss ? mContext.getDrawable(R.drawable.icon_cell_dissed) :
+                    mContext.getDrawable(R.drawable.icon_cell_diss));
+
+            MaterialButton comment = mItemView.findViewById(R.id.comment);
+            comment.setText("" + feed.ugc.commentCount);
+            MaterialButton share = mItemView.findViewById(R.id.share);
+            share.setText("" + feed.ugc.shareCount);
+
+
+            CornerFrameLayout topCommentContainer = mItemView.findViewById(R.id.top_comment_container);
+            PPImageView topCommentAvatar = mItemView.findViewById(R.id.top_comment_avatar);
+            PPImageView topCommentImage = mItemView.findViewById(R.id.top_comment_coment_image);
+            TextView topCommentComment = mItemView.findViewById(R.id.top_comment_comment);
+            ImageView topCommentPlay = mItemView.findViewById(R.id.top_comment_play);
+            TextView topCommentUserName = mItemView.findViewById(R.id.top_comment_username);
+            ImageView topCommentLike = mItemView.findViewById(R.id.top_comment_like);
+            TextView topCommentLikeCount = mItemView.findViewById(R.id.top_comment_like_count);
+            FrameLayout topCommentImageAudio = mItemView.findViewById(R.id.top_comment_image_audio);
+
+            if (feed.topComment != null) {
+                topCommentContainer.setVisibility(View.VISIBLE);
+                PPImageView.setImageUrl(topCommentAvatar, feed.topComment.author.avatar, true);
+                if (!TextUtils.isEmpty(feed.topComment.imageUrl)) {
+                    topCommentImageAudio.setVisibility(View.VISIBLE);
+                    topCommentImage.setImageUrl(feed.topComment.imageUrl);
+                    if (!TextUtils.isEmpty(feed.topComment.videoUrl)) {
+                        topCommentPlay.setVisibility(View.VISIBLE);
+                    } else {
+                        topCommentPlay.setVisibility(View.GONE);
+                    }
+                } else {
+                    topCommentImageAudio.setVisibility(View.GONE);
+                }
+
+                topCommentComment.setText(feed.topComment.commentText);
+
+
+                topCommentUserName.setText(feed.topComment.author.name);
+                topCommentLikeCount.setText("" + feed.topComment.likeCount);
+
+                topCommentLike.setImageDrawable(feed.topComment.hasLiked ? mContext.getDrawable(R.drawable.icon_cell_liked) :
+                        mContext.getDrawable(R.drawable.icon_cell_like));
+
+            } else {
+                topCommentContainer.setVisibility(View.GONE);
+            }
+
+        }
     }
 }
