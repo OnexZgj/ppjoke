@@ -41,14 +41,14 @@ public abstract class BaseViewModel<T> extends ViewModel {
 
     public abstract DataSource createDataSource();
 
-    private PagedList.Config mConfig;
+    public PagedList.Config mConfig;
 
     public BaseViewModel() {
         mConfig = new PagedList.Config.Builder().setPageSize(10)
                 .setInitialLoadSizeHint(12)
                 .build();
 
-        new LivePagedListBuilder(factory, mConfig)
+      pageData =  new LivePagedListBuilder(factory, mConfig)
                 .setInitialLoadKey(0)
                 .setBoundaryCallback(callback)
                 .build();

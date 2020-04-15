@@ -49,7 +49,6 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         notifyDataSetChanged();
     }
 
-    // 移除底部
     public void removeFooterView(View view) {
         int index = mFooters.indexOfValue(view);
         if (index < 0) return;

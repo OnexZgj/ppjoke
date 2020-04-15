@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mooc.libcommon.view.EmptyView;
 import com.onexzgj.ppjoke.R;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -89,7 +88,7 @@ public abstract class BaseFragment<T, M extends BaseViewModel<T>> extends Fragme
      *
      * @param hasData 这次请求是否有数据
      */
-    private void finishRefresh(Boolean hasData) {
+    public void finishRefresh(Boolean hasData) {
         PagedList<T> currentList = mAdapter.getCurrentList();
         hasData = hasData || currentList != null && currentList.size() > 0;
         RefreshState state = mSmartRefreshLayout.getState();
@@ -106,7 +105,7 @@ public abstract class BaseFragment<T, M extends BaseViewModel<T>> extends Fragme
 
     }
 
-    private void submitList(PagedList<T> data) {
+    public void submitList(PagedList<T> data) {
         if (data.size() > 0) {
             mAdapter.submitList(data);
         }
@@ -119,5 +118,5 @@ public abstract class BaseFragment<T, M extends BaseViewModel<T>> extends Fragme
      *
      * @return
      */
-    protected abstract PagedListAdapter<T, RecyclerView.ViewHolder> getAdapter();
+    protected abstract PagedListAdapter getAdapter();
 }

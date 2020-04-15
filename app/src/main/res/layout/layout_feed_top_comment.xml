@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp_16"
+    android:layout_marginRight="@dimen/dp_16"
+    android:background="@color/color_gray"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_60"
+        android:layout_gravity="right|top"
+        android:layout_marginRight="@dimen/dp_10"
+        android:src="@drawable/icon_god_comment2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="@dimen/dp_10">
+
+            <ImageView
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_video_play"
+                android:visibility="gone" />
+
+            <com.onexzgj.ppjoke.view.PPImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@color/color_theme_10"
+                tools:src="@mipmap/ic_launcher" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_2"
+                tools:src="@drawable/icon_cell_liked">
+
+            </ImageView>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_theme"
+                android:textSize="@dimen/sp_12"
+                tools:text="1000" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_20"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_3d3"
+                android:textSize="@dimen/sp_12"
+                tools:text="神秘的jetpack" />
+
+            <com.onexzgj.ppjoke.view.PPImageView
+                android:id="@+id/avatar"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                tools:src="@mipmap/ic_launcher_round">
+
+            </com.onexzgj.ppjoke.view.PPImageView>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_36"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/color_3d3"
+            android:textSize="@dimen/sp_14"
+            tools:text="神秘的JetPack神秘的JetPack神秘的JetPack" />
+
+    </LinearLayout>
+
+</FrameLayout>

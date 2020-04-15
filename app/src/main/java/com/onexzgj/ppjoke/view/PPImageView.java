@@ -39,17 +39,14 @@ public class PPImageView extends AppCompatImageView {
         ViewHelper.setViewOutline(this, attrs, defStyleAttr, 0);
     }
 
-
     public void setImageUrl(String imageUrl) {
         setImageUrl(this, imageUrl, false);
     }
 
-    @BindingAdapter(value = {"image_url", "isCircle"})
     public static void setImageUrl(PPImageView view, String imageUrl, boolean isCircle) {
         view.setImageUrl(view, imageUrl, isCircle, 0);
     }
 
-    @BindingAdapter(value = {"image_url", "isCircle", "radius"}, requireAll = false)
     public static void setImageUrl(PPImageView view, String imageUrl, boolean isCircle, int radius) {
         RequestBuilder<Drawable> builder = Glide.with(view).load(imageUrl);
         if (isCircle) {
@@ -115,7 +112,6 @@ public class PPImageView extends AppCompatImageView {
         setLayoutParams(params);
     }
 
-    @BindingAdapter(value = {"blur_url", "radius"})
     public static void setBlurImageUrl(ImageView imageView, String blurUrl, int radius) {
         Glide.with(imageView).load(blurUrl).override(radius)
                 .transform(new BlurTransformation())

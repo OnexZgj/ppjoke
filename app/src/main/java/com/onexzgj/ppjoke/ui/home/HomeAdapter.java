@@ -2,18 +2,21 @@ package com.onexzgj.ppjoke.ui.home;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.onexzgj.ppjoke.R;
+import com.onexzgj.ppjoke.base.BaseAdapter;
 import com.onexzgj.ppjoke.model.Feed;
+import com.onexzgj.ppjoke.view.PPImageView;
 
-public class HomeAdapter extends PagedListAdapter<Feed,RecyclerView.ViewHolder> {
+public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
 
-    private  LayoutInflater inflater;
+    private LayoutInflater inflater;
     protected Context mContext;
     protected String mCategory;
 
@@ -35,14 +38,36 @@ public class HomeAdapter extends PagedListAdapter<Feed,RecyclerView.ViewHolder> 
         mCategory = category;
     }
 
-    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+    protected ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {
+        View itemView = inflater.inflate(R.layout.item_feed_image, parent, false);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    protected int getItemViewType2(int position) {
+        Feed item = getItem(position);
+        return R.layout.item_feed_image;
+    }
+
+    @Override
+    protected void onBindViewHolder2(ViewHolder holder, int position) {
+        holder.bindData(getItem(position));
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        View mItemView;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            this.mItemView = itemView;
+        }
+
+        public void bindData(Feed item) {
+            PPImageView feedImage = mItemView.findViewById(R.id.feed_image);
+            feedImage.setImageUrl(item.cover);
+        }
 
     }
 }
