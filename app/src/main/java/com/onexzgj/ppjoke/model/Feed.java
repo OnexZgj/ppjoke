@@ -47,8 +47,9 @@ public class Feed  implements Serializable {
     public Ugc ugc;
 
 
-
-
+    public Ugc getUgc() {
+        return ugc;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

@@ -1,12 +1,10 @@
 package com.onexzgj.ppjoke.model;
 
 import androidx.annotation.Nullable;
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
 
 import java.io.Serializable;
 
-public class Ugc  implements Serializable {
+public class Ugc implements Serializable {
     /**
      * likeCount : 153
      * shareCount : 0
@@ -27,6 +25,35 @@ public class Ugc  implements Serializable {
     public boolean hasLiked;
 
 
+    public boolean isHasdiss() {
+        return hasdiss;
+    }
+
+    public void setHasdiss(boolean hasdiss) {
+        if (this.hasdiss == hasdiss)
+            return;
+        if (hasdiss) {
+            setHasLiked(false);
+        }
+        this.hasdiss = hasdiss;
+    }
+
+
+    public boolean isHasLiked() {
+        return hasLiked;
+    }
+
+    public void setHasLiked(boolean hasLiked) {
+        if (this.hasLiked == hasLiked)
+            return;
+        if (hasLiked) {
+            likeCount = likeCount + 1;
+            setHasdiss(false);
+        } else {
+            likeCount = likeCount - 1;
+        }
+        this.hasLiked = hasLiked;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

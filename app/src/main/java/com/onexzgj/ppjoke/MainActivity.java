@@ -1,7 +1,6 @@
 package com.onexzgj.ppjoke;
 
 import android.os.Bundle;
-import android.os.UserManager;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
@@ -22,6 +21,7 @@ import com.mooc.libnavannotation.FragmentDestination;
 import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.model.Destination;
 import com.onexzgj.ppjoke.model.User;
+import com.onexzgj.ppjoke.ui.login.UserManager;
 import com.onexzgj.ppjoke.utils.AppConfig;
 import com.onexzgj.ppjoke.utils.NavGraphBuilder;
 import com.onexzgj.ppjoke.view.AppBottomBar;
@@ -68,18 +68,25 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//        HashMap<String, Destination> destConfig = AppConfig.getDestConfig();
-//        Iterator<Map.Entry<String, Destination>> iterator = destConfig.entrySet().iterator();
-//        //遍历 target destination 是否需要登录拦截
-//        while (iterator.hasNext()) {
-//            Map.Entry<String, Destination> entry = iterator.next();
-//            Destination value = entry.getValue();
-//            if (value.id == menuItem.getItemId()) {
-//                navView.setSelectedItemId(menuItem.getItemId());
-//            }
-//            break;
-//        }
+        HashMap<String, Destination> destConfig = AppConfig.getDestConfig();
+        Iterator<Map.Entry<String, Destination>> iterator = destConfig.entrySet().iterator();
+        //遍历 target destination 是否需要登录拦截
+        while (iterator.hasNext()) {
+            Map.Entry<String, Destination> entry = iterator.next();
+            Destination value = entry.getValue();
+            if (value != null && !UserManager.get().isLogin() && value.needLogin && value.id == menuItem.getItemId()) {
+                UserManager.get().login(this).observe(this, new Observer<User>() {
+                    @Override
+                    public void onChanged(User user) {
+                        navView.setSelectedItemId(menuItem.getItemId());
+                    }
+                });
+                return false;
+            }
+        }
+
         navController.navigate(menuItem.getItemId());
+        //true或者false 则底下导航栏会显示着色
         return !TextUtils.isEmpty(menuItem.getTitle());
     }
 

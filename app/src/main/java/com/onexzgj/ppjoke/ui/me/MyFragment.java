@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.mooc.libnavannotation.FragmentDestination;
 import com.onexzgj.ppjoke.R;
 
-@FragmentDestination(pageUrl = "main/tabs/my")
+@FragmentDestination(pageUrl = "main/tabs/my",needLogin = true)
 public class MyFragment extends Fragment {
 
     private MyViewModel mViewModel;

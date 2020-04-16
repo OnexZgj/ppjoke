@@ -1,7 +1,6 @@
 package com.onexzgj.ppjoke.ui.home;
 
 import android.annotation.SuppressLint;
-import android.os.UserManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -17,6 +16,7 @@ import com.mooc.libnetwork.JsonCallback;
 import com.mooc.libnetwork.Request;
 import com.onexzgj.ppjoke.base.BaseViewModel;
 import com.onexzgj.ppjoke.model.Feed;
+import com.onexzgj.ppjoke.ui.login.UserManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,7 +67,7 @@ public class HomeViewModel extends BaseViewModel<Feed> {
         //feeds/queryHotFeedsList
         Request request = ApiService.get("/feeds/queryHotFeedsList")
                 .addParam("feedType", mFeedType)
-                .addParam("userId", 0)
+                .addParam("userId", UserManager.get().getUserId())
                 .addParam("feedId", key)
                 .addParam("pageCount", count)
                 .responseType(new TypeReference<ArrayList<Feed>>() {
@@ -92,7 +92,7 @@ public class HomeViewModel extends BaseViewModel<Feed> {
 
         @Override
         public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Feed> callback) {
-            Log.d("TAG", "HomeViewModel + loadInitial: " );
+            Log.d("TAG", "HomeViewModel + loadInitial: ");
             loadData(0, params.requestedLoadSize, callback);
         }
 
