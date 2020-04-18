@@ -2,8 +2,10 @@ package com.onexzgj.ppjoke.ui.home;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.ItemKeyedDataSource;
 import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
@@ -13,6 +15,7 @@ import com.mooc.libnavannotation.FragmentDestination;
 import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.base.BaseFragment;
 import com.onexzgj.ppjoke.base.MutablePageKeyedDataSource;
+import com.onexzgj.ppjoke.exoplayer.PageListPlayDetector;
 import com.onexzgj.ppjoke.model.Feed;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
@@ -25,6 +28,10 @@ public class HomeFragment extends BaseFragment<Feed, HomeViewModel> {
      * 去详情页的标记
      */
     private String feedType;
+    /**
+     * 播放视频的管理类
+     */
+    private PageListPlayDetector playDetector;
 
     public static HomeFragment newInstance(String feedType) {
         Bundle args = new Bundle();
@@ -37,7 +44,25 @@ public class HomeFragment extends BaseFragment<Feed, HomeViewModel> {
     @Override
     protected PagedListAdapter getAdapter() {
         feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
-        return new HomeAdapter(getContext(), feedType);
+        return new HomeAdapter(getContext(), feedType) {
+            @Override
+            public void onViewAttachedToWindow2(ViewHolder holder) {
+                if (holder.isVideoItem()) {
+                    playDetector.addTarget(holder.getListPlayerView());
+                }
+            }
+
+            @Override
+            public void onViewDetachedFromWindow2(ViewHolder holder) {
+                playDetector.removeTarget(holder.getListPlayerView());
+            }
+        };
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        playDetector = new PageListPlayDetector(this, mRecyclerView);
+        mViewModel.setmFeedType(feedType);
     }
 
     @Override

@@ -131,4 +131,29 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     }
 
     protected abstract void onBindViewHolder2(VH holder, int position);
+
+
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
+        if (!isHeaderPosition(holder.getAdapterPosition()) && !isFooterPosition(holder.getAdapterPosition())) {
+            this.onViewAttachedToWindow2((VH) holder);
+        }
+    }
+
+    public void onViewAttachedToWindow2(VH holder) {
+
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+        if (!isHeaderPosition(holder.getAdapterPosition()) && !isFooterPosition(holder.getAdapterPosition())) {
+            this.onViewDetachedFromWindow2((VH) holder);
+        }
+    }
+
+    public void onViewDetachedFromWindow2(VH holder) {
+
+    }
+
 }

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.ArchTaskExecutor;
@@ -19,12 +18,12 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
-import com.mooc.libcommon.global.AppGlobals;
 import com.mooc.libcommon.view.CornerFrameLayout;
 import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.base.BaseAdapter;
 import com.onexzgj.ppjoke.model.Feed;
 import com.onexzgj.ppjoke.ui.InteractionPresenter;
+import com.onexzgj.ppjoke.view.ListPlayerView;
 import com.onexzgj.ppjoke.view.PPImageView;
 
 public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
@@ -53,39 +52,61 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
 
     @Override
     protected ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.item_feed_image, parent, false);
-        return new ViewHolder(itemView);
+        View itemView = null;
+        switch (viewType) {
+            case R.layout.item_feed_image:
+                itemView = inflater.inflate(R.layout.item_feed_image, parent, false);
+                break;
+            case R.layout.item_feed_type_video:
+                itemView = inflater.inflate(R.layout.item_feed_type_video, parent, false);
+                break;
+        }
+        return new ViewHolder(itemView, viewType);
     }
 
     @Override
     protected int getItemViewType2(int position) {
         Feed item = getItem(position);
-        return R.layout.item_feed_image;
+        if (item.itemType == Feed.TYPE_IMAGE_TEXT) {
+            return R.layout.item_feed_image;
+        } else if (item.itemType == Feed.TYPE_VIDEO) {
+            return R.layout.item_feed_type_video;
+        }
+        return 0;
     }
 
     @Override
     protected void onBindViewHolder2(ViewHolder holder, int position) {
-        holder.bindData(getItem(position),position);
+        holder.bindData(getItem(position), position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
         View mItemView;
+        int mViewType = 0;
+        private ListPlayerView listPlayerView;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, int viewType) {
             super(itemView);
             this.mItemView = itemView;
+            this.mViewType = viewType;
         }
 
-        public void bindData(Feed feed,int position) {
+        public void bindData(Feed feed, int position) {
             TextView tvFeedText = mItemView.findViewById(R.id.tv_feed_text);
             tvFeedText.setText(feed.feeds_text);
 
             MaterialButton materialButtonFeedTag = mItemView.findViewById(R.id.feed_tag);
             materialButtonFeedTag.setText(feed.activityText);
 
-            PPImageView feedContentImage = mItemView.findViewById(R.id.feed_content_image);
-            feedContentImage.setImageUrl(feed.cover);
+            if (mViewType == R.layout.item_feed_image) {
+                PPImageView feedContentImage = mItemView.findViewById(R.id.feed_content_image);
+                feedContentImage.setImageUrl(feed.cover);
+            } else if (mViewType == R.layout.item_feed_type_video) {
+                listPlayerView = mItemView.findViewById(R.id.list_player_view);
+                listPlayerView.bindData(mCategory, feed.width, feed.height, feed.cover, feed.url);
+            }
+
 
             TextView tvAuthorName = mItemView.findViewById(R.id.tv_author_username);
             PPImageView ivAuthorAvatar = mItemView.findViewById(R.id.iv_author_avatar);
@@ -104,7 +125,7 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    InteractionPresenter.toggleFeedLike((LifecycleOwner) mContext,feed,new ToggleCallback(){
+                    InteractionPresenter.toggleFeedLike((LifecycleOwner) mContext, feed, new ToggleCallback() {
 
                         @SuppressLint("RestrictedApi")
                         @Override
@@ -116,6 +137,7 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
                                 }
                             });
                         }
+
                         @Override
                         public void toggleFail(String message) {
 
@@ -123,7 +145,6 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
                     });
                 }
             });
-
 
 
             MaterialButton diss = mItemView.findViewById(R.id.diss);
@@ -200,6 +221,14 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
                 topCommentContainer.setVisibility(View.GONE);
             }
 
+        }
+
+        public ListPlayerView getListPlayerView() {
+            return listPlayerView;
+        }
+
+        public boolean isVideoItem() {
+            return mViewType == R.layout.item_feed_image;
         }
     }
 }

@@ -30,7 +30,7 @@ import java.lang.reflect.Type;
 public abstract class BaseFragment<T, M extends BaseViewModel<T>> extends Fragment implements OnRefreshListener, OnLoadMoreListener {
 
     private SmartRefreshLayout mSmartRefreshLayout;
-    private RecyclerView mRecyclerView;
+    public RecyclerView mRecyclerView;
     private EmptyView mEmptyView;
 
     protected PagedListAdapter<T, RecyclerView.ViewHolder> mAdapter;
@@ -59,6 +59,7 @@ public abstract class BaseFragment<T, M extends BaseViewModel<T>> extends Fragme
         decoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
         decoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.list_divider));
         mRecyclerView.addItemDecoration(decoration);
+        mRecyclerView.setItemAnimator(null);
 
         genericViewModel();
 
