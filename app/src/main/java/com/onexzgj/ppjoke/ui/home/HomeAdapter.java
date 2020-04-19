@@ -80,7 +80,7 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
         holder.bindData(getItem(position), position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         View mItemView;
         int mViewType = 0;
@@ -94,14 +94,26 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
 
         public void bindData(Feed feed, int position) {
             TextView tvFeedText = mItemView.findViewById(R.id.tv_feed_text);
-            tvFeedText.setText(feed.feeds_text);
+
+            if (TextUtils.isEmpty(feed.feeds_text)) {
+                tvFeedText.setVisibility(View.GONE);
+            } else {
+                tvFeedText.setVisibility(View.VISIBLE);
+                tvFeedText.setText(feed.feeds_text);
+            }
 
             MaterialButton materialButtonFeedTag = mItemView.findViewById(R.id.feed_tag);
-            materialButtonFeedTag.setText(feed.activityText);
+
+            if (TextUtils.isEmpty(feed.activityText)) {
+                materialButtonFeedTag.setVisibility(View.GONE);
+            } else {
+                materialButtonFeedTag.setText(feed.activityText);
+                materialButtonFeedTag.setVisibility(View.VISIBLE);
+            }
 
             if (mViewType == R.layout.item_feed_image) {
                 PPImageView feedContentImage = mItemView.findViewById(R.id.feed_content_image);
-                feedContentImage.setImageUrl(feed.cover);
+                feedContentImage.bindData(feed.width, feed.height, 16, feed.cover);
             } else if (mViewType == R.layout.item_feed_type_video) {
                 listPlayerView = mItemView.findViewById(R.id.list_player_view);
                 listPlayerView.bindData(mCategory, feed.width, feed.height, feed.cover, feed.url);

@@ -150,4 +150,19 @@ public class PageListPlayDetector {
             activeTarget.onActive();
         }
     }
+
+    public void onPause() {
+        if (playingTarget != null) {
+            playingTarget.inActive();
+        }
+    }
+
+    public void onResume() {
+        if (playingTarget != null) {
+            playingTarget.onActive();
+
+        }
+    }
+
+
 }

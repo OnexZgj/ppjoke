@@ -1,4 +1,4 @@
-package com.onexzgj.ppjoke.ui.home;
+package com.onexzgj.ppjoke.ui.sofa.item;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,20 +10,19 @@ import androidx.paging.ItemKeyedDataSource;
 import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
 
-
 import com.mooc.libnavannotation.FragmentDestination;
-import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.base.BaseFragment;
 import com.onexzgj.ppjoke.base.MutablePageKeyedDataSource;
 import com.onexzgj.ppjoke.exoplayer.PageListPlayDetector;
 import com.onexzgj.ppjoke.exoplayer.PageListPlayManager;
 import com.onexzgj.ppjoke.model.Feed;
+import com.onexzgj.ppjoke.ui.home.HomeAdapter;
+import com.onexzgj.ppjoke.ui.home.HomeViewModel;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.List;
 
-@FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
-public class HomeFragment extends BaseFragment<Feed, HomeViewModel> {
+public class SofaFragmentItem extends BaseFragment<Feed, HomeViewModel> {
 
     /**
      * 去详情页的标记
@@ -34,10 +33,10 @@ public class HomeFragment extends BaseFragment<Feed, HomeViewModel> {
      */
     private PageListPlayDetector playDetector;
 
-    public static HomeFragment newInstance(String feedType) {
+    public static SofaFragmentItem newInstance(String feedType) {
         Bundle args = new Bundle();
         args.putString("feedType", feedType);
-        HomeFragment fragment = new HomeFragment();
+        SofaFragmentItem fragment = new SofaFragmentItem();
         fragment.setArguments(args);
         return fragment;
     }
@@ -111,7 +110,6 @@ public class HomeFragment extends BaseFragment<Feed, HomeViewModel> {
                 playDetector.onResume();
             }
         }
-
     }
 
     @Override
