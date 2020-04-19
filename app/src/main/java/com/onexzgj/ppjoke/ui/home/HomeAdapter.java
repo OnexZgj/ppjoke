@@ -228,7 +228,7 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
         }
 
         public boolean isVideoItem() {
-            return mViewType == R.layout.item_feed_image;
+            return mViewType == R.layout.item_feed_type_video;
         }
     }
 }

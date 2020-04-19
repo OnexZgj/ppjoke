@@ -76,6 +76,7 @@ public class PageListPlayDetector {
      */
     private boolean isTargetInBounds(IPlayTarget target) {
         ViewGroup owner = target.getOwner();
+
         ensureRecyclerViewLocation();
         if (!owner.isShown() || !owner.isAttachedToWindow()) {
             return false;
