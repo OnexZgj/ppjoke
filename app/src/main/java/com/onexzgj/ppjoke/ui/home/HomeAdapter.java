@@ -23,6 +23,7 @@ import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.base.BaseAdapter;
 import com.onexzgj.ppjoke.model.Feed;
 import com.onexzgj.ppjoke.ui.InteractionPresenter;
+import com.onexzgj.ppjoke.ui.detail.FeedDetailActivity;
 import com.onexzgj.ppjoke.view.ListPlayerView;
 import com.onexzgj.ppjoke.view.PPImageView;
 
@@ -93,6 +94,14 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
         }
 
         public void bindData(Feed feed, int position) {
+
+            mItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FeedDetailActivity.startFeedDetailActivity(mContext,feed,mCategory);
+                }
+            });
+
             TextView tvFeedText = mItemView.findViewById(R.id.tv_feed_text);
 
             if (TextUtils.isEmpty(feed.feeds_text)) {

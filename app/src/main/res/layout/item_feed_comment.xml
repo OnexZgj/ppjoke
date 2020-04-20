@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dp_10">
+
+    <com.onexzgj.ppjoke.view.PPImageView
+        android:id="@+id/pp_comment_avatar"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_16"
+        android:src="@drawable/splash" />
+
+    <TextView
+        android:id="@+id/tv_comment_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/pp_comment_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_16"
+        android:textColor="@color/color_000"
+        android:textSize="@dimen/sp_12"
+        tools:text="神秘的jetpack"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_comment_author_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_14"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_16"
+        android:gravity="center"
+        android:text="作者"
+        android:textSize="10sp"
+        app:cornerRadius="3dp"
+        android:backgroundTint="@color/color_theme"
+        android:textColor="@color/color_white"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_comment_username"
+        android:paddingLeft="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_0"
+        android:paddingRight="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_0"
+        app:layout_constraintLeft_toRightOf="@id/tv_comment_username"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/tv_comment_create_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_16"
+        android:textColor="@color/color_999"
+        android:textSize="10sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_comment_username"
+        app:layout_constraintLeft_toRightOf="@+id/btn_comment_author_tag"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="12天前"></TextView>
+
+    <TextView
+        android:id="@+id/tv_comment_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginRight="16dp"
+        android:drawableRight="@drawable/icon_cell_liked"
+        android:drawablePadding="@dimen/dp_3"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:text="123"
+        android:textColor="@color/color_999"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:drawableRight="@drawable/icon_cell_liked_large"
+        tools:text="1000"></TextView>
+
+    <ImageView
+        android:id="@+id/comment_delete"
+        android:layout_width="@dimen/dp_14"
+        android:layout_height="@dimen/dp_14"
+        android:layout_marginRight="@dimen/dp_10"
+        android:src="@drawable/icon_item_cell_delete"
+        app:layout_constraintBottom_toBottomOf="@id/tv_comment_like"
+        app:layout_constraintRight_toLeftOf="@+id/tv_comment_like"
+        app:layout_constraintTop_toTopOf="@id/tv_comment_like"></ImageView>
+
+    <TextView
+        android:id="@+id/tv_comment_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_5"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:textColor="@color/color_333"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/pp_comment_avatar"
+        app:layout_constraintRight_toLeftOf="@+id/tv_comment_like"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comment_username"
+        tools:text="comment.commentText"></TextView>
+
+    <FrameLayout
+        android:id="@+id/fl_comment_ext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        app:layout_constraintLeft_toRightOf="@+id/pp_comment_avatar"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_text">
+
+        <com.onexzgj.ppjoke.view.PPImageView
+            android:id="@+id/iv_comment_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/color_gray2"
+            android:scaleType="center"
+            tools:layout_height="100dp"
+            tools:layout_width="100dp">
+
+        </com.onexzgj.ppjoke.view.PPImageView>
+
+        <ImageView
+            android:id="@+id/iv_comment_video_icon"
+            android:layout_width="@dimen/dp_25"
+            android:layout_height="@dimen/dp_25"
+            android:layout_gravity="center"
+            android:src="@drawable/icon_video_play"></ImageView>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
