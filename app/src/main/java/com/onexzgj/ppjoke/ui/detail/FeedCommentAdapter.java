@@ -1,6 +1,7 @@
 package com.onexzgj.ppjoke.ui.detail;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.mooc.libcommon.extention.AbsPagedListAdapter;
 import com.mooc.libcommon.utils.PixUtils;
 import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.model.Comment;
+import com.onexzgj.ppjoke.utils.TimeUtils;
 import com.onexzgj.ppjoke.view.PPImageView;
 
 public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedCommentAdapter.ViewHolder> {
@@ -81,6 +83,24 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
         }
 
         public void bindData(Comment item) {
+            tvCommentUserName.setText(item.author.name);
+            tvComentCreateTime.setText(TimeUtils.calculate(item.createTime));
+            PPImageView.setImageUrl(ppCommentAvator,item.author.avatar,true);
+            tvCommentLike.setText(""+item.likeCount);
+
+
+            if (item.hasLiked){
+                Drawable nav_up=mContext.getResources().getDrawable(R.drawable.icon_cell_liked);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                tvCommentLike.setCompoundDrawables(null, null, nav_up, null);
+            }else{
+                Drawable nav_up=mContext.getResources().getDrawable(R.drawable.icon_cell_like);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                tvCommentLike.setCompoundDrawables(null, null, nav_up, null);
+            }
+            tvCommentText.setText(item.commentText);
+
+
             if (!TextUtils.isEmpty(item.imageUrl)) {
                 flCommentExt.setVisibility(View.VISIBLE);
                 ivCommentCover.setVisibility(View.VISIBLE);
