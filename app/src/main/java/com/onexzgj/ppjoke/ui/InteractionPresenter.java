@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mooc.libcommon.extention.LiveDataBus;
 import com.mooc.libcommon.global.AppGlobals;
 import com.mooc.libnetwork.ApiResponse;
 import com.mooc.libnetwork.ApiService;
@@ -58,7 +59,10 @@ public class InteractionPresenter {
                         if (response.body != null) {
                             boolean hasLiked = response.body.getBoolean("hasLiked").booleanValue();
                             feed.getUgc().setHasLiked(hasLiked);
-                            toggleCallback.toggleSuccess();
+                            toggleCallback.toggleSuccess(feed);
+                            LiveDataBus.get().with(DATA_FROM_INTERACTION)
+                                    .postValue(feed);
+
                         }
                     }
 
@@ -92,7 +96,7 @@ public class InteractionPresenter {
                         if (response.body != null) {
                             boolean hasLiked = response.body.getBoolean("hasLiked").booleanValue();
                             feed.getUgc().setHasdiss(hasLiked);
-                            toggleCallback.toggleSuccess();
+                            toggleCallback.toggleSuccess(feed);
                         }
                     }
 
@@ -141,6 +145,80 @@ public class InteractionPresenter {
                 }
             }
         };
+    }
+
+    //收藏/取消收藏一个帖子
+    public static void toggleFeedFavorite(LifecycleOwner owner, Feed feed) {
+        if (!isLogin(owner, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                toggleFeedFavorite(feed);
+            }
+        })) {
+        } else {
+            toggleFeedFavorite(feed);
+        }
+    }
+
+    /**
+     * 收藏帖子
+     * @param feed
+     */
+    private static void toggleFeedFavorite(Feed feed) {
+        ApiService.get("/ugc/toggleFavorite")
+                .addParam("itemId", feed.itemId)
+                .addParam("userId", UserManager.get().getUserId())
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            boolean hasFavorite = response.body.getBooleanValue("hasFavorite");
+                            feed.getUgc().setHasFavorite(hasFavorite);
+                            LiveDataBus.get().with(DATA_FROM_INTERACTION)
+                                    .postValue(feed);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
+    }
+
+    //关注/取消关注一个用户
+    public static void toggleFollowUser(LifecycleOwner owner, Feed feed) {
+        if (!isLogin(owner, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                toggleFollowUser(feed);
+            }
+        })) {
+        } else {
+            toggleFollowUser(feed);
+        }
+    }
+
+    private static void toggleFollowUser(Feed feed) {
+        ApiService.get("/ugc/toggleUserFollow")
+                .addParam("followUserId", UserManager.get().getUserId())
+                .addParam("userId", feed.author.userId)
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            boolean hasFollow = response.body.getBooleanValue("hasLiked");
+                            feed.getAuthor().setHasFollow(hasFollow);
+                            LiveDataBus.get().with(DATA_FROM_INTERACTION)
+                                    .postValue(feed);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
     }
 
 }

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".ui.detail.FeedDetailActivity">
 
     <FrameLayout
@@ -13,28 +13,36 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48">
 
-        <ImageView
-            android:id="@+id/iv_afdti_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/dp_16"
-            android:paddingRight="@dimen/dp_16"
-            android:src="@drawable/icon_back_black" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_afdti_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="帖子详情页"
-            android:textColor="@color/color_000"
-            android:textSize="@dimen/sp_16" />
+            <ImageView
+                android:id="@+id/iv_afdti_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                android:src="@drawable/icon_back_black" />
 
-        <include
-            android:id="@+id/author_info_layout"
-            layout="@layout/author_info_layout"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tv_afdti_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="帖子详情页"
+                android:textColor="@color/color_000"
+                android:textSize="@dimen/sp_16" />
+
+            <include
+                android:id="@+id/author_info_layout"
+                layout="@layout/author_info_layout"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -49,12 +57,11 @@
         android:id="@+id/rv_afdti_commend"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <include
         android:id="@+id/interaction_layout"
-        layout="@layout/layout_feed_detail_bottom_inateraction"/>
-
+        layout="@layout/layout_feed_detail_bottom_inateraction" />
 
 
 </LinearLayout>

@@ -14,16 +14,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.ArchTaskExecutor;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.mooc.libcommon.extention.LiveDataBus;
 import com.mooc.libcommon.view.CornerFrameLayout;
 import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.base.BaseAdapter;
 import com.onexzgj.ppjoke.model.Feed;
 import com.onexzgj.ppjoke.ui.InteractionPresenter;
 import com.onexzgj.ppjoke.ui.detail.FeedDetailActivity;
+import com.onexzgj.ppjoke.ui.login.UserManager;
 import com.onexzgj.ppjoke.view.ListPlayerView;
 import com.onexzgj.ppjoke.view.PPImageView;
 
@@ -79,7 +82,44 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
     @Override
     protected void onBindViewHolder2(ViewHolder holder, int position) {
         holder.bindData(getItem(position), position);
+        holder.mItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedDetailActivity.startFeedDetailActivity(mContext, getItem(position), mCategory);
+
+                if (mFeedObserver == null) {
+                    mFeedObserver = new FeedObserver();
+                    LiveDataBus.get()
+                            .with(InteractionPresenter.DATA_FROM_INTERACTION)
+                            .observe((LifecycleOwner) mContext, mFeedObserver);
+                }
+                mFeedObserver.setFeed(getItem(position));
+            }
+        });
     }
+
+    private FeedObserver mFeedObserver;
+
+    class FeedObserver implements Observer<Feed> {
+
+
+        public Feed mFeed;
+
+        @Override
+        public void onChanged(Feed newOne) {
+            if (mFeed.id != newOne.id)
+                return;
+
+            mFeed.author = newOne.author;
+            mFeed.ugc = newOne.ugc;
+            notifyDataSetChanged();
+        }
+
+        public void setFeed(Feed feed) {
+            this.mFeed = feed;
+        }
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -94,15 +134,13 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
         }
 
         public void bindData(Feed feed, int position) {
-
-            mItemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FeedDetailActivity.startFeedDetailActivity(mContext,feed,mCategory);
-                }
-            });
-
             TextView tvFeedText = mItemView.findViewById(R.id.tv_feed_text);
+            ImageView ivFeedDelete = mItemView.findViewById(R.id.feed_delete);
+            if (feed.author.id == UserManager.get().getUserId()) {
+                ivFeedDelete.setVisibility(View.VISIBLE);
+            } else {
+                ivFeedDelete.setVisibility(View.GONE);
+            }
 
             if (TextUtils.isEmpty(feed.feeds_text)) {
                 tvFeedText.setVisibility(View.GONE);
@@ -150,7 +188,7 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
 
                         @SuppressLint("RestrictedApi")
                         @Override
-                        public void toggleSuccess() {
+                        public void toggleSuccess(Feed feed) {
                             ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
                                 @Override
                                 public void run() {
@@ -181,7 +219,7 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
                     InteractionPresenter.toggleFeedDiss((LifecycleOwner) mContext, feed, new ToggleCallback() {
                         @SuppressLint("RestrictedApi")
                         @Override
-                        public void toggleSuccess() {
+                        public void toggleSuccess(Feed feed) {
                             ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
                                 @Override
                                 public void run() {

@@ -1,6 +1,6 @@
 package com.onexzgj.ppjoke.ui.detail;
 
-import android.util.Log;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -9,19 +9,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.arch.core.executor.ArchTaskExecutor;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.onexzgj.ppjoke.R;
 import com.onexzgj.ppjoke.model.Feed;
+import com.onexzgj.ppjoke.ui.InteractionPresenter;
+import com.onexzgj.ppjoke.ui.home.ToggleCallback;
 import com.onexzgj.ppjoke.utils.TimeUtils;
 import com.onexzgj.ppjoke.view.PPImageView;
 
-public class ImageViewHandler extends ViewHandler {
+public class ImageViewHandler extends ViewHandler implements View.OnClickListener {
 
-    private  LayoutInflater mInflate;
+    private LayoutInflater mInflate;
     private PPImageView headerImage;
     private PPImageView ivDhAuthorAvatar;
     private TextView tvDhAuthorName;
@@ -29,12 +32,21 @@ public class ImageViewHandler extends ViewHandler {
     private FrameLayout mFlAfdtiTitleContainer;
     private MaterialButton btnDhFollow;
     private TextView mTvFlAfdtiTitle;
-    private  View titleAuthorInfoLayout;
+    private View titleAuthorInfoLayout;
     private LinearLayout headerViewContainer;
-    private  PPImageView titleAuthorAvatar;
-    private  TextView titleAuthorUsername;
-    private  MaterialButton titleAuthorFollow;
-    private final TextView titleCreateTime;
+    private PPImageView titleAuthorAvatar;
+    private TextView titleAuthorUsername;
+    private MaterialButton titleAuthorFollow;
+    private TextView titleCreateTime;
+    private TextView bottomInputView;
+    private LinearLayout bottomCollect;
+    private LinearLayout bottomLike;
+    private LinearLayout bottomShare;
+    private AppCompatImageView ivBottomCollect;
+    private AppCompatImageView ivBottomLike;
+    private TextView tvBottomCollect;
+    private TextView tvBottomLikeCount;
+    private MaterialButton btnAilFollow;
 
     public ImageViewHandler(FragmentActivity activity) {
         super(activity);
@@ -48,6 +60,18 @@ public class ImageViewHandler extends ViewHandler {
         titleAuthorFollow = activity.findViewById(R.id.btn_ail_follow);
         titleCreateTime = activity.findViewById(R.id.tv_create_time);
         ivBack = activity.findViewById(R.id.iv_afdti_back);
+
+        bottomInputView = activity.findViewById(R.id.bottom_input_view);
+        bottomCollect = activity.findViewById(R.id.bottom_collect);
+        bottomLike = activity.findViewById(R.id.bottom_like);
+        bottomShare = activity.findViewById(R.id.bottom_share);
+        ivBottomCollect = activity.findViewById(R.id.iv_bottom_collect);
+        ivBottomLike = activity.findViewById(R.id.iv_bottom_like);
+        tvBottomCollect = activity.findViewById(R.id.tv_bottom_collect);
+        tvBottomLikeCount = activity.findViewById(R.id.tv_bottom_like_count);
+        btnAilFollow = activity.findViewById(R.id.btn_ail_follow);
+
+
         mInflate = LayoutInflater.from(activity);
 
     }
@@ -56,9 +80,18 @@ public class ImageViewHandler extends ViewHandler {
     public void bindData(Feed feed) {
         super.bindData(feed);
 
+        bottomInputView.setOnClickListener(this);
+        bottomShare.setOnClickListener(this);
+        bottomLike.setOnClickListener(this);
+        bottomCollect.setOnClickListener(this);
+        btnAilFollow.setOnClickListener(this);
+
+        tvBottomCollect.setText(feed.ugc.hasFavorite ? "已收藏" : "收藏");
+        tvBottomLikeCount.setText("" + feed.ugc.likeCount);
+
         //title信息绑定
         titleCreateTime.setText(TimeUtils.calculate(feed.createTime));
-        PPImageView.setImageUrl(titleAuthorAvatar,feed.author.avatar,true);
+        PPImageView.setImageUrl(titleAuthorAvatar, feed.author.avatar, true);
         titleAuthorUsername.setText(feed.author.name);
         titleAuthorFollow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,14 +129,60 @@ public class ImageViewHandler extends ViewHandler {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
-                Log.d("TAG", "onScrolled: " + headerViewContainer.getTop() + ": " + mFlAfdtiTitleContainer.getMeasuredHeight() + ":" + dy);
-
                 boolean visible = headerViewContainer.getTop() <= -mFlAfdtiTitleContainer.getMeasuredHeight();
                 titleAuthorInfoLayout.setVisibility(visible ? View.VISIBLE : View.GONE);
                 mTvFlAfdtiTitle.setVisibility(visible ? View.GONE : View.VISIBLE);
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bottom_input_view:
+                break;
+            case R.id.bottom_share:
+
+                break;
+            case R.id.bottom_like:
+                InteractionPresenter.toggleFeedLike(mActivity, mFeed, new ToggleCallback() {
+                    @SuppressLint("RestrictedApi")
+                    @Override
+                    public void toggleSuccess(Feed feed) {
+                        ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvBottomLikeCount.setText("" + feed.ugc.likeCount);
+                                if (feed.ugc.hasLiked) {
+                                    ivBottomLike.setBackground(mActivity.getDrawable(R.drawable.icon_cell_liked));
+                                }else{
+                                    ivBottomLike.setBackground(mActivity.getDrawable(R.drawable.icon_cell_like));
+                                }
+
+                                if (feed.ugc.hasFavorite) {
+                                    tvBottomCollect.setText(mActivity.getString(R.string.has_collect));
+                                    ivBottomCollect.setBackground(mActivity.getDrawable(R.drawable.ic_collected));
+                                }else{
+                                    tvBottomCollect.setText(mActivity.getString(R.string.collect));
+                                    ivBottomCollect.setBackground(mActivity.getDrawable(R.drawable.ic_collect));
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void toggleFail(String message) {
+
+                    }
+                });
+                break;
+            case R.id.bottom_collect:
+                InteractionPresenter.toggleFeedFavorite(mActivity,mFeed);
+                break;
+            case R.id.btn_ail_follow:
+
+                break;
+        }
     }
 }

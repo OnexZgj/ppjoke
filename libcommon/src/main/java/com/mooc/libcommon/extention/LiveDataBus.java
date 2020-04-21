@@ -74,7 +74,6 @@ public class LiveDataBus {
         private int mVersion = 0;
 
         public StickyLiveData(String eventName) {
-
             mEventName = eventName;
         }
 

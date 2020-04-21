@@ -71,4 +71,7 @@ public class User extends BaseObservable implements Serializable {
                 && hasFollow == newUser.hasFollow;
     }
 
+    public void setHasFollow(boolean hasFollow) {
+        this.hasFollow = hasFollow;
+    }
 }

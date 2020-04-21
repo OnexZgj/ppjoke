@@ -75,4 +75,7 @@ public class Feed  implements Serializable {
     }
 
 
+    public User getAuthor() {
+        return author;
+    }
 }

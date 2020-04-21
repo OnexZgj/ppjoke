@@ -68,4 +68,7 @@ public class Ugc implements Serializable {
                 && hasdiss == newUgc.hasdiss;
     }
 
+    public void setHasFavorite(boolean hasFavorite) {
+        this.hasFavorite = hasFavorite;
+    }
 }
