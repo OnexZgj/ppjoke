@@ -3,6 +3,7 @@ package com.onexzgj.ppjoke.ui.detail;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.ItemKeyedDataSource;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mooc.libcommon.utils.PixUtils;
 import com.mooc.libcommon.view.EmptyView;
 import com.onexzgj.ppjoke.R;
+import com.onexzgj.ppjoke.base.MutableItemKeyedDataSource;
 import com.onexzgj.ppjoke.model.Comment;
 import com.onexzgj.ppjoke.model.Feed;
 
@@ -32,6 +35,8 @@ public abstract class ViewHandler {
     protected FragmentActivity mActivity;
     protected Feed mFeed;
     protected FeedCommentAdapter mAdapter;
+    protected TextView inputView;
+    protected CommentDialog commentDialog;
 
     public ViewHandler(FragmentActivity activity) {
         this.mActivity = activity;
@@ -62,7 +67,39 @@ public abstract class ViewHandler {
             }
         });
 
+        inputView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCommentDialog();
+            }
+        });
+
     }
+
+    private void showCommentDialog() {
+        if (commentDialog == null) {
+            commentDialog = CommentDialog.newInstance(mFeed.itemId);
+        }
+
+        commentDialog.setCommentAddListener(new CommentDialog.commentAddListener() {
+            @Override
+            public void onAddComment(Comment comment) {
+                MutableItemKeyedDataSource<Integer,Comment> mutableItemKeyedDataSource = new MutableItemKeyedDataSource<Integer, Comment>((ItemKeyedDataSource) viewModel.getDataSource()) {
+                    @NonNull
+                    @Override
+                    public Integer getKey(@NonNull Comment item) {
+                        return item.id;
+                    }
+                };
+                mutableItemKeyedDataSource.data.add(comment);
+                mutableItemKeyedDataSource.data.addAll(mAdapter.getCurrentList());
+                PagedList<Comment> pagedList = mutableItemKeyedDataSource.buildNewPagedList(mAdapter.getCurrentList().getConfig());
+                mAdapter.submitList(pagedList);
+            }
+        });
+        commentDialog.show(mActivity.getSupportFragmentManager(), "comment_dialog");
+    }
+
 
     private EmptyView mEmptyView;
 

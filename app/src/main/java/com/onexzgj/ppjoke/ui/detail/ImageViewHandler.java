@@ -38,7 +38,7 @@ public class ImageViewHandler extends ViewHandler implements View.OnClickListene
     private TextView titleAuthorUsername;
     private MaterialButton titleAuthorFollow;
     private TextView titleCreateTime;
-    private TextView bottomInputView;
+
     private LinearLayout bottomCollect;
     private LinearLayout bottomLike;
     private LinearLayout bottomShare;
@@ -61,7 +61,7 @@ public class ImageViewHandler extends ViewHandler implements View.OnClickListene
         titleCreateTime = activity.findViewById(R.id.tv_create_time);
         ivBack = activity.findViewById(R.id.iv_afdti_back);
 
-        bottomInputView = activity.findViewById(R.id.bottom_input_view);
+        inputView = activity.findViewById(R.id.bottom_input_view);
         bottomCollect = activity.findViewById(R.id.bottom_collect);
         bottomLike = activity.findViewById(R.id.bottom_like);
         bottomShare = activity.findViewById(R.id.bottom_share);
@@ -80,7 +80,6 @@ public class ImageViewHandler extends ViewHandler implements View.OnClickListene
     public void bindData(Feed feed) {
         super.bindData(feed);
 
-        bottomInputView.setOnClickListener(this);
         bottomShare.setOnClickListener(this);
         bottomLike.setOnClickListener(this);
         bottomCollect.setOnClickListener(this);
@@ -140,8 +139,6 @@ public class ImageViewHandler extends ViewHandler implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bottom_input_view:
-                break;
             case R.id.bottom_share:
 
                 break;
@@ -177,9 +174,11 @@ public class ImageViewHandler extends ViewHandler implements View.OnClickListene
                     }
                 });
                 break;
+
             case R.id.bottom_collect:
                 InteractionPresenter.toggleFeedFavorite(mActivity,mFeed);
                 break;
+
             case R.id.btn_ail_follow:
 
                 break;

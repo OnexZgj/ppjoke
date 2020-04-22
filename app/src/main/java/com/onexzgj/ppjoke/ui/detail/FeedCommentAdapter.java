@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.paging.ItemKeyedDataSource;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +22,9 @@ import com.google.android.material.button.MaterialButton;
 import com.mooc.libcommon.extention.AbsPagedListAdapter;
 import com.mooc.libcommon.utils.PixUtils;
 import com.onexzgj.ppjoke.R;
+import com.onexzgj.ppjoke.base.MutableItemKeyedDataSource;
 import com.onexzgj.ppjoke.model.Comment;
+import com.onexzgj.ppjoke.ui.InteractionPresenter;
 import com.onexzgj.ppjoke.utils.TimeUtils;
 import com.onexzgj.ppjoke.view.PPImageView;
 
@@ -53,6 +59,38 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
     protected void onBindViewHolder2(ViewHolder holder, int position) {
         Comment item = getItem(position);
         holder.bindData(item);
+        holder.ivCommentDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InteractionPresenter.deleteFeedComment(mContext,item.itemId,item.commentId).observe((LifecycleOwner) mContext, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean success) {
+                        if (success) {
+                            deleteAndRefreshList(item);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void deleteAndRefreshList(Comment item) {
+        PagedList<Comment> currentList = getCurrentList();
+        MutableItemKeyedDataSource<Integer,Comment> dataSource= new MutableItemKeyedDataSource<Integer, Comment>((ItemKeyedDataSource) currentList.getDataSource()) {
+            @NonNull
+            @Override
+            public Integer getKey(@NonNull Comment item) {
+                return item.id;
+            }
+        };
+
+        for (Comment comment:currentList) {
+            if (comment!=item){
+                dataSource.data.add(comment);
+            }
+        }
+        PagedList<Comment> pagedList = dataSource.buildNewPagedList(getCurrentList().getConfig());
+        submitList(pagedList);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -67,6 +105,7 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
         private PPImageView ivCommentCover;
         private ImageView ivCommentVideoIcon;
         private FrameLayout flCommentExt;
+        private ImageView ivCommentDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,6 +116,7 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
             tvComentCreateTime = itemView.findViewById(R.id.tv_comment_create_time);
             btnCommentAuthorTag = itemView.findViewById(R.id.btn_comment_author_tag);
             tvCommentText = itemView.findViewById(R.id.tv_comment_text);
+            ivCommentDelete = itemView.findViewById(R.id.comment_delete);
             ivCommentCover = itemView.findViewById(R.id.iv_comment_cover);
             ivCommentVideoIcon = itemView.findViewById(R.id.iv_comment_video_icon);
             flCommentExt = itemView.findViewById(R.id.fl_comment_ext);
