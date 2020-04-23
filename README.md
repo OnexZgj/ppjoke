@@ -27,3 +27,9 @@ backgroundTint 的使用
 Dialog填充完以后再设置，否则无法生效
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+
+文件上传用的到
+    //AtomicInteger, CountDownLatch, CyclicBarrier
+//        showLoadingDialog();
+        AtomicInteger count = new AtomicInteger(1);

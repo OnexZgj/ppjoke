@@ -1,5 +1,6 @@
 package com.onexzgj.ppjoke.ui.detail;
 
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -84,7 +85,7 @@ public abstract class ViewHandler {
         commentDialog.setCommentAddListener(new CommentDialog.commentAddListener() {
             @Override
             public void onAddComment(Comment comment) {
-                MutableItemKeyedDataSource<Integer,Comment> mutableItemKeyedDataSource = new MutableItemKeyedDataSource<Integer, Comment>((ItemKeyedDataSource) viewModel.getDataSource()) {
+                MutableItemKeyedDataSource<Integer, Comment> mutableItemKeyedDataSource = new MutableItemKeyedDataSource<Integer, Comment>((ItemKeyedDataSource) viewModel.getDataSource()) {
                     @NonNull
                     @Override
                     public Integer getKey(@NonNull Comment item) {
@@ -117,6 +118,12 @@ public abstract class ViewHandler {
                 mEmptyView.setTitle(mActivity.getString(R.string.feed_comment_empty));
             }
             mAdapter.addHeaderView(mEmptyView);
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (commentDialog != null && commentDialog.isAdded()) {
+            commentDialog.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

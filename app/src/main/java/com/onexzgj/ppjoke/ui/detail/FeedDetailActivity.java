@@ -1,5 +1,6 @@
 package com.onexzgj.ppjoke.ui.detail;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -40,5 +41,15 @@ public class FeedDetailActivity extends AppCompatActivity {
         intent.putExtra(KEY_CATEGORY, category);
         context.startActivity(intent);
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (viewHandler != null) {
+            viewHandler.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 
 }

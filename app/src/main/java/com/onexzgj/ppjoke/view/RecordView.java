@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mooc.libcommon.utils.PixUtils;
@@ -21,18 +22,20 @@ import com.onexzgj.ppjoke.R;
 public class RecordView extends View implements View.OnLongClickListener, View.OnClickListener {
 
     private static final int PROGRESS_INTERVAL = 100;
-    private final Paint fillPaint;
-    private final Paint progressPaint;
-    private int progressMaxValue;
-    private final int radius;
-    private final int progressWidth;
-    private final int progressColor;
-    private final int fillColor;
-    private final int maxDuration;
+
+    private int radius;
+    private int progressWidth;
+    private int progressColor;
+    private int fillColor;
+    private int maxDuration;
     private int progressValue;
-    private boolean isRecording;
-    private long startRecordTime;
+    private int progressMaxValue;
+
+    private boolean isRecording ;
+    private Paint fillPaint;
+    private Paint progressPaint;
     private onRecordListener mListener;
+    private long startRecordTime;
 
     public RecordView(Context context) {
         this(context, null);
@@ -66,9 +69,10 @@ public class RecordView extends View implements View.OnLongClickListener, View.O
         progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setStrokeWidth(progressWidth);
 
+
         Handler handler = new Handler(Looper.getMainLooper()) {
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
                 progressValue++;
                 postInvalidate();
@@ -79,6 +83,7 @@ public class RecordView extends View implements View.OnLongClickListener, View.O
                 }
             }
         };
+
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -105,13 +110,20 @@ public class RecordView extends View implements View.OnLongClickListener, View.O
         setOnLongClickListener(this);
     }
 
-
     private void finishRecord() {
         if (mListener != null) {
             mListener.onFinish();
         }
-
     }
+
+    public void setMaxDuration(int maxDuration) {
+        this.progressMaxValue = maxDuration * 1000 / PROGRESS_INTERVAL;
+    }
+
+    public void setProgressValue(int progressValue) {
+        this.progressValue = progressValue;
+    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -119,9 +131,7 @@ public class RecordView extends View implements View.OnLongClickListener, View.O
         int width = getWidth();
         int height = getHeight();
         if (isRecording) {
-
             canvas.drawCircle(width / 2, height / 2, width / 2, fillPaint);
-
             int left = progressWidth / 2;
             int top = progressWidth / 2;
             int right = width - progressWidth / 2;
@@ -133,12 +143,7 @@ public class RecordView extends View implements View.OnLongClickListener, View.O
         }
     }
 
-    public void setMaxDuration(int maxDuration) {
-        this.progressMaxValue = maxDuration * 1000 / PROGRESS_INTERVAL;
-    }
-
     public void setOnRecordListener(onRecordListener listener) {
-
         mListener = listener;
     }
 
@@ -157,6 +162,7 @@ public class RecordView extends View implements View.OnLongClickListener, View.O
         }
     }
 
+
     public interface onRecordListener {
         void onClick();
 
@@ -164,6 +170,6 @@ public class RecordView extends View implements View.OnLongClickListener, View.O
 
         void onFinish();
     }
+
+
 }
-
-
