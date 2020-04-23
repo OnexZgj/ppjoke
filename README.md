@@ -33,3 +33,6 @@ Dialog填充完以后再设置，否则无法生效
     //AtomicInteger, CountDownLatch, CyclicBarrier
 //        showLoadingDialog();
         AtomicInteger count = new AtomicInteger(1);
+
+
+Activity --->Dialog --- >CaputerActiivty---->PreviewActivity 之间数据传递及返回，会通过回调到Activity再手动回调到Dialog中
