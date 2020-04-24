@@ -52,6 +52,9 @@
     <string name="fragment_my_logout">确定要继续退出吗？</string>
     <string name="fragment_my_logout_ok">确定</string>
     <string name="fragment_my_logout_cancel">取消</string>
+    <string name="et_hint">加个话题,内容会被更多的人看到哈~</string>
+    <string name="cover_upload_faild">封面上传失败</string>
+    <string name="video_upload_failed">原始文件上传失败</string>
 
     <string-array name="profile_tabs">
         <item>动态</item>

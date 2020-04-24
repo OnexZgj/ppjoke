@@ -45,9 +45,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CommentDialog extends AppCompatDialogFragment implements View.OnClickListener {
 
-
     private long itemId;
-
     private String filePath;
     private int width=0, height=0;
     private boolean isVideo=false;

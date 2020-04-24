@@ -1,13 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="发布页面" />
+    <EditText
+        android:id="@+id/et_publish_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_16"
+        android:background="@color/color_white"
+        android:gravity="left|top"
+        android:hint="@string/et_hint"
+        android:maxLines="1000"
+        android:minHeight="100dp"
+        android:textSize="@dimen/sp_14"
+        android:padding="@dimen/dp_10"
+        android:textColor="@color/color_000"
+        android:textColorHint="@color/color_999"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_publish_container" />
 
-</LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/file_container"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:layout_marginTop="@dimen/dimen_16"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/publish_add_tag">
+
+        <com.onexzgj.ppjoke.view.PPImageView
+            android:id="@+id/publish_cover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/publish_video_icon"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_gravity="center"
+            android:src="@drawable/icon_video_play"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/publish_delete_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:paddingLeft="@dimen/dp_6"
+            app:srcCompat="@drawable/icon_close"
+            app:tint="@color/color_white"/>
+
+
+    </FrameLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/title_publish_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/publish_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@drawable/icon_close" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="帖子发布"
+            android:textColor="@color/color_000"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_2"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_gray"></View>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_publish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:backgroundTint="@color/color_theme"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:text="发布"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_12"
+            app:cornerRadius="@dimen/dp_10" />
+
+
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/action_publish_add_file"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:src="@drawable/ic_add_file"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/publish_add_tag"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/publish_add_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:backgroundTint="@color/color_white"
+        android:text="添加话题"
+        android:textColor="@color/color_theme"
+        app:cornerRadius="@dimen/dp_13"
+        app:icon="@drawable/ic_add_club"
+        app:iconGravity="textEnd"
+        app:iconTint="@color/color_theme"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_publish_content"
+        app:strokeColor="@color/color_theme"
+        app:strokeWidth="2px" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
