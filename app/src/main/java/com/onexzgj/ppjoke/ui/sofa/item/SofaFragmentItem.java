@@ -56,6 +56,16 @@ public class SofaFragmentItem extends BaseFragment<Feed, HomeViewModel> {
             public void onViewDetachedFromWindow2(ViewHolder holder) {
                 playDetector.removeTarget(holder.getListPlayerView());
             }
+
+            @Override
+            public void onCurrentListChanged(@Nullable PagedList<Feed> previousList, @Nullable PagedList<Feed> currentList) {
+                if (previousList != null && currentList != null) {
+                    if (!currentList.containsAll(previousList)) {
+                        //则表示是刷新逻辑,滑动到第一个item的位置
+                        mRecyclerView.scrollToPosition(0);
+                    }
+                }
+            }
         };
     }
 

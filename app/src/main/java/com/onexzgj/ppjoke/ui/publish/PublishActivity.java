@@ -146,6 +146,7 @@ public class PublishActivity extends AppCompatActivity implements View.OnClickLi
                         OneTimeWorkRequest request = getOneTimeWorkRequest(coverFilePath);
                         coverUploadUUID = request.getId();
                         workRequests.add(request);
+                        enqueue(workRequests);
                     }
                 });
             }

@@ -35,4 +35,19 @@ Dialog填充完以后再设置，否则无法生效
         AtomicInteger count = new AtomicInteger(1);
 
 
+ PagelistAdapter中的数据监测变化改变监听
+
+            HomeFragment中可以查看
+
+           @Override
+             public void onCurrentListChanged(@Nullable PagedList<Feed> previousList, @Nullable PagedList<Feed> currentList) {
+                 if (previousList != null && currentList != null) {
+                     if (!currentList.containsAll(previousList)) {
+                         //则表示是刷新逻辑,滑动到第一个item的位置
+                         mRecyclerView.scrollToPosition(0);
+                     }
+                 }
+             }
+
+
 Activity --->Dialog --- >CaputerActiivty---->PreviewActivity 之间数据传递及返回，会通过回调到Activity再手动回调到Dialog中

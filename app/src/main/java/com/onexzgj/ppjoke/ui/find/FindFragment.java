@@ -17,7 +17,6 @@ import com.onexzgj.ppjoke.R;
 @FragmentDestination(pageUrl = "main/tabs/find")
 public class FindFragment extends Fragment {
 
-    private FindViewModel mViewModel;
 
     public static FindFragment newInstance() {
         return new FindFragment();
@@ -32,8 +31,6 @@ public class FindFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(FindViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }
