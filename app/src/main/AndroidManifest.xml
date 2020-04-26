@@ -10,10 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.detail.PreviewActivity"
-            android:theme="@style/preview"></activity>
-        <activity android:name=".ui.detail.CaptureActivity"
-            android:theme="@style/capture"/>
+        <activity android:name=".ui.find.detail.TagFeedListActivity"></activity>
+        <activity
+            android:name=".ui.detail.PreviewActivity"
+            android:theme="@style/preview" />
+        <activity
+            android:name=".ui.detail.CaptureActivity"
+            android:theme="@style/capture" />
         <activity
             android:name=".ui.detail.FeedDetailActivity"
             android:theme="@style/feedDetail" />

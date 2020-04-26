@@ -50,4 +50,7 @@ Dialog填充完以后再设置，否则无法生效
              }
 
 
+LiveData要实现数据共享，需要设置lifecycleOwner为同一个，不然接受不到，比如设置父Fragment
+中的使用this，子Fragment中如果使用子LifecycleOwner，父Fragment中则不会接受到消息
+
 Activity --->Dialog --- >CaputerActiivty---->PreviewActivity 之间数据传递及返回，会通过回调到Activity再手动回调到Dialog中

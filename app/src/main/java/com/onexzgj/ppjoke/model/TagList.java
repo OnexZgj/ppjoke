@@ -55,4 +55,7 @@ public class TagList implements Serializable {
     }
 
 
+    public void setHasFollow(Boolean follow) {
+        this.hasFollow = follow;
+    }
 }

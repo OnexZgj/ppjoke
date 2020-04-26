@@ -18,6 +18,7 @@ import com.mooc.libnetwork.ApiResponse;
 import com.mooc.libnetwork.ApiService;
 import com.mooc.libnetwork.JsonCallback;
 import com.onexzgj.ppjoke.model.Feed;
+import com.onexzgj.ppjoke.model.TagList;
 import com.onexzgj.ppjoke.model.User;
 import com.onexzgj.ppjoke.ui.home.ToggleCallback;
 import com.onexzgj.ppjoke.ui.login.UserManager;
@@ -29,6 +30,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InteractionPresenter {
     public static final String DATA_FROM_INTERACTION = "data_from_interaction";
+
+
+    public static final String DATA_FROM_INTERACTION_FOLLOW = "data_from_interaction_follow";
 
     private static final String URL_TOGGLE_FEED_LIK = "/ugc/toggleFeedLike";
 
@@ -259,4 +263,37 @@ public class InteractionPresenter {
     }
 
 
+    public static void toggleTagFollow(LifecycleOwner owner, TagList tagList) {
+        if (!isLogin(owner, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                toggleTagFollowInternal(tagList);
+            }
+        })) ;
+        else {
+            toggleTagFollowInternal(tagList);
+        }
+    }
+
+    private static void toggleTagFollowInternal(TagList tagList) {
+        ApiService.get("/tag/toggleTagFollow")
+                .addParam("tagId", tagList.tagId)
+                .addParam("userId", UserManager.get().getUserId())
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            Boolean follow = response.body.getBoolean("hasFollow");
+                            tagList.setHasFollow(follow);
+                            LiveDataBus.get().with(DATA_FROM_INTERACTION_FOLLOW)
+                                    .postValue(tagList);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
+    }
 }

@@ -31,7 +31,7 @@ public abstract class BaseFragment<T, M extends BaseViewModel<T>> extends Fragme
 
     private SmartRefreshLayout mSmartRefreshLayout;
     public RecyclerView mRecyclerView;
-    private EmptyView mEmptyView;
+    public EmptyView mEmptyView;
 
     protected PagedListAdapter<T, RecyclerView.ViewHolder> mAdapter;
     private DividerItemDecoration decoration;
