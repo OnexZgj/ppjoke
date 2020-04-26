@@ -1,9 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.find.detail.TagFeedListActivity">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+        layout="@layout/layout_refresh_view"></include>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:fitsSystemWindows="true">
+
+        <ImageView
+            android:id="@+id/action_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:src="@drawable/icon_back_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+
+        <TextView
+            android:id="@+id/tag_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textColor="@color/color_000"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tag_logo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="title"></TextView>
+
+        <View
+            android:id="@+id/top_line"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@color/color_gray2"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"></View>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/top_bar_follow"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="28dp"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_0"
+            android:paddingTop="@dimen/dp_0"
+            android:paddingRight="@dimen/dp_0"
+            android:paddingBottom="@dimen/dp_0"
+            android:textColor="@color/color_white"
+            android:textSize="13sp"
+            app:backgroundTint="@color/color_theme"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tag_title"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="关注"></com.google.android.material.button.MaterialButton>
+
+        <com.onexzgj.ppjoke.view.PPImageView
+            android:id="@+id/tag_logo"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginLeft="@dimen/dp_10"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/action_back"
+            app:layout_constraintTop_toTopOf="parent"></com.onexzgj.ppjoke.view.PPImageView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

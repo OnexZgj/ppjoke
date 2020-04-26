@@ -30,9 +30,7 @@ public class FeedDetailActivity extends AppCompatActivity {
         }else{
             viewHandler = new VedioViewHandler(this);
         }
-
         viewHandler.bindData(feed);
-
     }
 
     public static void startFeedDetailActivity(Context context, Feed item,String category){
