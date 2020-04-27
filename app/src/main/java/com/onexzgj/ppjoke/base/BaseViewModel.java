@@ -69,7 +69,7 @@ public abstract class BaseViewModel<T> extends ViewModel {
 
         @Override
         public void onItemAtEndLoaded(@NonNull Object itemAtEnd) {
-            super.onItemAtEndLoaded(itemAtEnd);
+
         }
     };
 }

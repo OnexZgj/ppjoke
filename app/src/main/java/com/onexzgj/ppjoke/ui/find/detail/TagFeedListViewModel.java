@@ -1,5 +1,7 @@
 package com.onexzgj.ppjoke.ui.find.detail;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
@@ -55,6 +57,7 @@ public class TagFeedListViewModel extends BaseViewModel<Feed> {
     }
 
     private void loadData(Integer feedId, ItemKeyedDataSource.LoadCallback<Feed> callback) {
+        Log.e("loadData", "loadData: " + feedId);
         ApiResponse<List<Feed>> response = ApiService.get("/feeds/queryHotFeedsList")
                 .addParam("userId", UserManager.get().getUserId())
                 .addParam("pageCount", 10)

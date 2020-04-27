@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -67,8 +69,8 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         StatusBar.fitSystemBar(this);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_feed_list);
         tagList = (TagList) getIntent().getSerializableExtra(KEY_TAG_LIST);
 
@@ -94,7 +96,8 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
         recyclerView.setAdapter(adapter);
         recyclerView.setAnimation(null);
 
-        tagFeedListViewModel = new ViewModelProvider(this).get(TagFeedListViewModel.class);
+//        tagFeedListViewModel = new ViewModelProvider(this).get(TagFeedListViewModel.class);
+        tagFeedListViewModel = ViewModelProviders.of(this).get(TagFeedListViewModel.class);
 
         tagFeedListViewModel.setFeedType(tagList.title);
         tagFeedListViewModel.getPageData().observe(this, new Observer<PagedList<Feed>>() {
@@ -103,6 +106,8 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
                 submitList(feeds);
             }
         });
+
+        tagFeedListViewModel.getBoundaryPageData().observe(this, hasdata -> finishRefresh(hasdata));
 
         playDetector = new PageListPlayDetector(this, recyclerView);
         addHeaderView();
@@ -132,8 +137,7 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
                 totalScrollY += dy;
                 boolean overHeight = totalScrollY > PixUtils.dp2px(48);
                 tagLogo.setVisibility(overHeight ? View.VISIBLE : View.GONE);
-                headerTitle.setVisibility(overHeight ? View.VISIBLE : View.GONE);
-                headerFollow.setVisibility(overHeight ? View.VISIBLE : View.GONE);
+                topBarFollow.setVisibility(overHeight ? View.VISIBLE : View.GONE);
                 actionBack.setImageResource(overHeight ? R.drawable.icon_back_black : R.drawable.icon_back_white);
                 topBar.setBackgroundColor(overHeight ? Color.WHITE : Color.TRANSPARENT);
                 topLine.setVisibility(overHeight ? View.VISIBLE : View.INVISIBLE);
@@ -148,7 +152,6 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
         }
         finishRefresh(feeds.size() > 0);
     }
-
 
     public BaseAdapter getAdapter() {
         return new HomeAdapter(this, KEY_FEED_TYPE) {
@@ -174,6 +177,9 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
             public void onCurrentListChanged(@Nullable PagedList<Feed> previousList, @Nullable PagedList<Feed> currentList) {
                 //这个方法是在我们每提交一次 pagelist对象到adapter 就会触发一次
                 //每调用一次 adpater.submitlist
+                if (previousList != null && currentList != null) {
+                    Log.d("TAG", "onCurrentListChanged: " + previousList.size() + " : " + currentList.size());
+                }
                 if (previousList != null && currentList != null) {
                     if (!currentList.containsAll(previousList)) {
                         recyclerView.scrollToPosition(0);

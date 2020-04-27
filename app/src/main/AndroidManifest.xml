@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.find.detail.TagFeedListActivity"></activity>
+        <activity android:name=".ui.me.detail.ProfileActivity"></activity>
+        <activity android:name=".ui.find.detail.TagFeedListActivity" />
         <activity
             android:name=".ui.detail.PreviewActivity"
             android:theme="@style/preview" />

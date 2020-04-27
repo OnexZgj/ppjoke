@@ -30,6 +30,7 @@
         android:layout_marginRight="@dimen/dimen_16"
         android:textColor="@color/color_theme"
         android:textSize="13sp"
+        android:visibility="gone"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header_background"
         tools:text="@string/tag_follow"></TextView>

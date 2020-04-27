@@ -5,10 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.mooc.libcommon.extention.AbsPagedListAdapter;
 
 /**
  * crete by OnexZgj
@@ -155,5 +158,50 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public void onViewDetachedFromWindow2(VH holder) {
 
     }
+
+    @Override
+    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
+        super.registerAdapterDataObserver(new BaseAdapter.AdapterDataObserverProxy(observer));
+    }
+
+    //如果我们先添加了headerView,而后网络数据回来了再更新到列表上
+    //由于Paging在计算列表上item的位置时 并不会顾及我们有没有添加headerView，就会出现列表定位的问题
+    //实际上 RecyclerView#setAdapter方法，它会给Adapter注册了一个AdapterDataObserver
+    //咱么可以代理registerAdapterDataObserver()传递进来的observer。在各个方法的实现中，把headerView的个数算上，再中转出去即可
+    private class AdapterDataObserverProxy extends RecyclerView.AdapterDataObserver {
+        private RecyclerView.AdapterDataObserver mObserver;
+
+        public AdapterDataObserverProxy(RecyclerView.AdapterDataObserver observer) {
+            mObserver = observer;
+        }
+
+        public void onChanged() {
+            mObserver.onChanged();
+        }
+
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            mObserver.onItemRangeChanged(positionStart + mHeaders.size(), itemCount);
+        }
+
+        public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
+            mObserver.onItemRangeChanged(positionStart + mHeaders.size(), itemCount, payload);
+        }
+
+        public void onItemRangeInserted(int positionStart, int itemCount) {
+            mObserver.onItemRangeInserted(positionStart + mHeaders.size(), itemCount);
+        }
+
+        public void onItemRangeRemoved(int positionStart, int itemCount) {
+            mObserver.onItemRangeRemoved(positionStart + mHeaders.size(), itemCount);
+        }
+
+        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+            mObserver.onItemRangeMoved(fromPosition + mHeaders.size(), toPosition + mHeaders.size(), itemCount);
+        }
+
+
+    }
+
+
 
 }
