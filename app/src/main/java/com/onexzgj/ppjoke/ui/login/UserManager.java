@@ -1,11 +1,18 @@
 package com.onexzgj.ppjoke.ui.login;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
+import androidx.arch.core.executor.ArchTaskExecutor;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.mooc.libcommon.global.AppGlobals;
+import com.mooc.libnetwork.ApiResponse;
+import com.mooc.libnetwork.ApiService;
+import com.mooc.libnetwork.JsonCallback;
 import com.mooc.libnetwork.cache.CacheManager;
 import com.onexzgj.ppjoke.model.User;
 
@@ -62,4 +69,43 @@ public class UserManager {
         mUser = null;
     }
 
+    public LiveData<User>  refresh() {
+        if (!isLogin()) {
+            return login(AppGlobals.getApplication());
+        }
+        MutableLiveData<User> liveData= new MutableLiveData<>();
+        ApiService.get("/user/query")
+                .addParam("userId", getUserId())
+                .execute(new JsonCallback<User>() {
+                    @Override
+                    public void onSuccess(ApiResponse<User> response) {
+                        save(response.body);
+                        liveData.postValue(getUser());
+                    }
+
+                    @SuppressLint("RestrictedApi")
+                    @Override
+                    public void onError(ApiResponse<User> response) {
+                        ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(AppGlobals.getApplication(), response.message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        liveData.postValue(null);
+                    }
+                });
+        return liveData;
+
+    }
+
+    private void save(User user) {
+        mUser = user;
+        CacheManager.save(KEY_CACHE_USER, user);
+        if (userLiveData.hasObservers()){
+            userLiveData.postValue(user);
+        }
+
+    }
 }

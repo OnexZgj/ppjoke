@@ -125,7 +125,7 @@ public class HomeAdapter extends BaseAdapter<Feed, HomeAdapter.ViewHolder> {
 
         View mItemView;
         int mViewType = 0;
-        private ListPlayerView listPlayerView;
+        public ListPlayerView listPlayerView;
 
         public ViewHolder(@NonNull View itemView, int viewType) {
             super(itemView);

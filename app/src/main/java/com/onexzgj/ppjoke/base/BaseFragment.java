@@ -29,7 +29,7 @@ import java.lang.reflect.Type;
 
 public abstract class BaseFragment<T, M extends BaseViewModel<T>> extends Fragment implements OnRefreshListener, OnLoadMoreListener {
 
-    private SmartRefreshLayout mSmartRefreshLayout;
+    public SmartRefreshLayout mSmartRefreshLayout;
     public RecyclerView mRecyclerView;
     public EmptyView mEmptyView;
 

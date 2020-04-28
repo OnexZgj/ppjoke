@@ -1,14 +1,18 @@
 package com.onexzgj.ppjoke.ui.me;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mooc.libcommon.utils.StatusBar;
@@ -40,6 +44,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 
     public static final String KEY_TAB_TYPE = "key_tab_type";
     private View ivMfAll;
+    private ImageView ivMfClose;
 
 
     @Override
@@ -57,6 +62,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         tvMyLike = view.findViewById(R.id.tv_mf_like);
         tvMyFollow = view.findViewById(R.id.tv_mf_follow);
         tvMyScore = view.findViewById(R.id.tv_mf_score);
+        ivMfClose = view.findViewById(R.id.iv_mf_close);
+        ivMfClose.setOnClickListener(this);
 
         tvMyFeed = view.findViewById(R.id.tv_mf_feed);
         tvMyFeed.setOnClickListener(this);
@@ -76,6 +83,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         initData();
 
 
+
+
     }
 
     private void initData() {
@@ -89,6 +98,19 @@ public class MyFragment extends Fragment implements View.OnClickListener {
             PPImageView.setImageUrl(ppMyAvator, user.avatar, true);
             PPImageView.setBlurImageUrl(ppMyBackground,user.avatar,50);
         }
+
+        UserManager.get().refresh().observe(getActivity(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                tvMyLike.setText(StringConvert.convertSpannable(user.likeCount, getContext().getString(R.string.like_count)));
+                tvMyFans.setText(StringConvert.convertSpannable(user.followerCount, getContext().getString(R.string.fans_count)));
+                tvMyFollow.setText(StringConvert.convertSpannable(user.likeCount, getContext().getString(R.string.follow_count)));
+                tvMyScore.setText(StringConvert.convertSpannable(user.likeCount, getContext().getString(R.string.score_count)));
+
+                PPImageView.setImageUrl(ppMyAvator, user.avatar, true);
+                PPImageView.setBlurImageUrl(ppMyBackground,user.avatar,50);
+            }
+        });
     }
 
     @Override
@@ -108,6 +130,22 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.iv_mf_all:
                 ProfileActivity.startProfieActivity(getContext(), TAB_TYPE_ALL);
+                break;
+            case R.id.iv_mf_close:
+                new AlertDialog.Builder(getActivity()).setMessage("确定要退出吗?")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                UserManager.get().logout();
+                                getActivity().onBackPressed();
+                            }
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                    }
+                }).create().show();
                 break;
         }
     }
